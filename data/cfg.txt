@@ -1,0 +1,13 @@
+humanNum 4
+robotNum 15
+humanMaxWorkload 10 7 8 9
+aggregationBool 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+aggregationMBC 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2	
+aggregationMBE 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+robType  1 2 3 1 2 3 1 2 3 1 2 3 1 2 3
+surveillanceMBE 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3
+
+
+
+
+ 
