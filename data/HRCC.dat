@@ -1,3 +1,94 @@
 robNum 15
 humNum 4
 alliance 0 2 2 1 0 3 1 1 2 3 3 1 0 2 3
+HumanWorkLoad 2 humID 0 time 0
+humID 0 robID 0 startTime 0 endTime 2.99381
+HumanWorkLoad 2 humID 2 time 0
+humID 2 robID 1 startTime 0 endTime 1.08187
+HumanWorkLoad 4 humID 2 time 0
+humID 2 robID 2 startTime 1.08187 endTime 2.40127
+HumanWorkLoad 2 humID 1 time 0
+humID 1 robID 3 startTime 0 endTime 1.6534
+HumanWorkLoad 4 humID 1 time 0
+humID 1 robID 4 startTime 1.6534 endTime 4.51159
+HumanWorkLoad 2 humID 3 time 0
+humID 3 robID 5 startTime 0 endTime 1.4892
+HumanWorkLoad 5 humID 1 time 0
+humID 1 robID 6 startTime 4.51159 endTime 5.81666
+HumanWorkLoad 6 humID 1 time 0
+humID 1 robID 7 startTime 5.81666 endTime 8.62738
+HumanWorkLoad 5 humID 2 time 0
+humID 2 robID 8 startTime 2.40127 endTime 4.14881
+HumanWorkLoad 4 humID 3 time 0
+humID 3 robID 9 startTime 1.4892 endTime 4.35528
+HumanWorkLoad 6 humID 3 time 0
+humID 3 robID 10 startTime 4.35528 endTime 6.73042
+HumanWorkLoad 7 humID 3 time 0
+humID 3 robID 11 startTime 6.73042 endTime 8.67035
+HumanWorkLoad 4 humID 0 time 0
+humID 0 robID 12 startTime 2.99381 endTime 5.69685
+HumanWorkLoad 6 humID 2 time 0
+humID 2 robID 13 startTime 4.14881 endTime 5.54952
+HumanWorkLoad 6 humID 0 time 0
+humID 0 robID 14 startTime 5.69685 endTime 6.62719
+HumanWorkLoad 4 humID 2 time 1.08187
+HumanWorkLoad 5 humID 3 time 1.4892
+HumanWorkLoad 4 humID 1 time 1.6534
+HumanWorkLoad 2 humID 2 time 2.40127
+HumanWorkLoad 4 humID 0 time 2.99381
+HumanWorkLoad 1 humID 2 time 4.14881
+HumanWorkLoad 3 humID 3 time 4.35528
+HumanWorkLoad 2 humID 1 time 4.51159
+HumanWorkLoad 0 humID 2 time 5.54952
+HumanWorkLoad 2 humID 0 time 5.69685
+HumanWorkLoad 1 humID 1 time 5.81666
+HumanWorkLoad 0 humID 0 time 6.62719
+HumanWorkLoad 1 humID 3 time 6.73042
+HumanWorkLoad 0 humID 1 time 8.62738
+HumanWorkLoad 0 humID 3 time 8.67035
+HumanWorkLoad 3 humID 1 time 15
+humID 1 robID 0 startTime 16 endTime 20.1861
+HumanWorkLoad 5 humID 1 time 15
+humID 1 robID 4 startTime 20.1861 endTime 23.7654
+HumanWorkLoad 3 humID 0 time 15
+humID 0 robID 12 startTime 15 endTime 18.8923
+HumanWorkLoad 6 humID 1 time 16
+humID 1 robID 3 startTime 23.7654 endTime 27.1605
+HumanWorkLoad 6 humID 0 time 16
+humID 0 robID 6 startTime 18.8923 endTime 23.4589
+HumanWorkLoad 3 humID 2 time 16
+humID 2 robID 7 startTime 17 endTime 20.8251
+HumanWorkLoad 6 humID 2 time 16
+humID 2 robID 11 startTime 20.8251 endTime 24.4221
+HumanWorkLoad 8 humID 0 time 17
+humID 0 robID 1 startTime 23.4589 endTime 27.8022
+HumanWorkLoad 3 humID 3 time 17
+humID 3 robID 2 startTime 18 endTime 21.8236
+HumanWorkLoad 6 humID 3 time 17
+humID 3 robID 8 startTime 21.8236 endTime 24.8919
+HumanWorkLoad 8 humID 2 time 17
+humID 2 robID 13 startTime 24.4221 endTime 27.8663
+HumanWorkLoad 9 humID 3 time 18
+humID 3 robID 5 startTime 24.8919 endTime 28.1762
+HumanWorkLoad 7 humID 1 time 18
+humID 1 robID 9 startTime 27.1605 endTime 31.4086
+HumanWorkLoad 10 humID 0 time 18
+humID 0 robID 10 startTime 27.8022 endTime 32.1235
+HumanWorkLoad 12 humID 3 time 18
+humID 3 robID 14 startTime 28.1762 endTime 31.3229
+HumanWorkLoad 7 humID 0 time 18.8923
+HumanWorkLoad 4 humID 1 time 20.1861
+HumanWorkLoad 5 humID 2 time 20.8251
+HumanWorkLoad 9 humID 3 time 21.8236
+HumanWorkLoad 4 humID 0 time 23.4589
+HumanWorkLoad 2 humID 1 time 23.7654
+HumanWorkLoad 2 humID 2 time 24.4221
+HumanWorkLoad 6 humID 3 time 24.8919
+HumanWorkLoad 1 humID 1 time 27.1605
+HumanWorkLoad 2 humID 0 time 27.8022
+HumanWorkLoad 0 humID 2 time 27.8663
+HumanWorkLoad 3 humID 3 time 28.1762
+HumanWorkLoad 0 humID 3 time 31.3229
+HumanWorkLoad 0 humID 1 time 31.4086
+HumanWorkLoad 0 humID 0 time 32.1235
+alliance 0 2 2 1 0 3 1 1 2 3 3 1 0 2 3

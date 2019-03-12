@@ -37,18 +37,23 @@ public:
 	vector<Human> _m_vHum;
 	void init();
 	vector<size_t> allocate();
-	pair<size_t,size_t> tempAllocate(size_t const & robID, size_t const &taskType);
+	pair<size_t,size_t> tempAllocate(size_t const & robID, size_t const &taskType,double  const &arrTime);
 	vector<size_t> _m_curCCRelation;
 
 	vector<size_t> findFreeHuman();
 	vector<size_t> findFreeRobot();
-
+	void eliminate(size_t const & robID, double const &eliminateTime);
 	std::ofstream c_deg;
+
 private:
 	// cMode = control mode
 	// tType = task type 
-	double calIncreFitness(size_t const & robID, size_t const& humID, size_t const &cMode, size_t const &tType);
-	void update(size_t const & humID, size_t const & robID, size_t const &cMode, size_t const &tType);
-	void eliminate(size_t const & humID, size_t const & robID, size_t const &cMode, size_t const &tType);
+	//  arrTime means  the task arrive the helper time 
+	double calIncreFitness(size_t const & robID, size_t const& humID, size_t const &cMode, size_t const &tType,
+		 double  const &arrTime);
+	void update(size_t const & humID, size_t const & robID, size_t const &cMode, size_t const &tType,
+		double const &arrTime);
+	void eliminate(size_t const & humID, size_t const & robID, size_t const &cMode, size_t const &tType,
+		double const &eliminateTime);
 };
 

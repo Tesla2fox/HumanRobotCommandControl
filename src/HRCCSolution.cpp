@@ -15,7 +15,7 @@ vector<size_t> HRCCSolution::allocate()
 {
 	auto freeHuman = this->findFreeHuman();
 	auto freeRob = this->findFreeRobot();
-	
+
 
 	if (freeHuman.size() == this->_m_vHum.size() && freeRob.size() == this->_m_vRob.size())
 	{
@@ -41,26 +41,27 @@ vector<size_t> HRCCSolution::allocate()
 	return this->_m_curCCRelation;
 }
 
-pair<size_t, size_t> HRCCSolution::tempAllocate(size_t const & robID, size_t const & taskType)
+pair<size_t, size_t> HRCCSolution::tempAllocate(size_t const & robID, size_t const & taskType, double  const &arrTime)
 {
 	auto &  rob = this->_m_vRob[robID];
 	auto compTuple = [](tuple<size_t, size_t, double> & a, tuple<size_t, size_t, double> b)
 	{
 		return get<2>(a) < get<2>(b);
-	};	
+	};
 	switch (taskType)
 	{
 	case Aggregation:
+	case Surveillance:
 	{
 		vector<tuple<size_t, size_t, double>> vFitness;
 		for (size_t i = 0; i < _m_vHum.size(); i++)
 		{
-			double  MBCFitness = this->calIncreFitness(robID, i, controlMode::MBC, Aggregation);
+			double  MBCFitness = this->calIncreFitness(robID, i, controlMode::MBC, taskType, arrTime);
 			vFitness.push_back(tuple<size_t, size_t, double>(i, controlMode::MBC, MBCFitness));
 			if (rob.aggregationBool == 1)
 			{
-				double  MBEFitness = this->calIncreFitness(robID, i, controlMode::MBE, Aggregation);
-				vFitness.push_back(tuple<size_t, size_t, double>(i, controlMode::MBC, MBCFitness));
+				double  MBEFitness = this->calIncreFitness(robID, i, controlMode::MBE, taskType, arrTime);
+				vFitness.push_back(tuple<size_t, size_t, double>(i, controlMode::MBE, MBEFitness));
 			}
 		}
 		std::sort(vFitness.begin(), vFitness.end(), compTuple);
@@ -68,7 +69,7 @@ pair<size_t, size_t> HRCCSolution::tempAllocate(size_t const & robID, size_t con
 		pair<size_t, size_t> res;
 		res.first = get<0>(maxFitness);
 		res.second = get<1>(maxFitness);
-		this->update(res.first, robID, res.second, taskType);
+		this->update(res.first, robID, res.second, taskType, arrTime);
 		return res;
 		break;
 	}
@@ -100,35 +101,82 @@ vector<size_t> HRCCSolution::findFreeRobot()
 	return freeRob;
 }
 
-double HRCCSolution::calIncreFitness(size_t const & robID, size_t const & humID, size_t const & cMode, size_t const & tType)
+void HRCCSolution::eliminate(size_t const & robID, double const & eliminateTime)
+{
+	auto & rob = this->_m_vRob[robID];
+	eliminate(rob.humanID, robID, rob._m_controlMode, rob.taskType, eliminateTime);
+}
+
+double HRCCSolution::calIncreFitness(size_t const & robID, size_t const & humID, size_t const & cMode, size_t const & tType
+	, double  const &arrTime)
 {
 	auto &hum = this->_m_vHum[humID];
 	auto &rob = this->_m_vRob[robID];
 	double increWorkLoad;
+	double predictCompTime = arrTime;
 	switch (tType)
 	{
 	case Aggregation:
+	{
 		if (cMode == controlMode::MBC)
+		{
 			increWorkLoad = rob.aggregationMBC;
+			predictCompTime = rob.aggregationMBCDur;
+		}
 		if (cMode == controlMode::MBE)
+		{
 			increWorkLoad = rob.aggregationMBE;
+			predictCompTime = rob.aggregationMBEDur;
+		}
+		for (size_t i = 0; i < hum._m_vControlRobID.size(); i++)
+		{
+			auto & it = hum._m_vControlRobID[i];
+			if (it.second == controlMode::MBC)
+				predictCompTime += this->_m_vRob[i].aggregationMBCDur;
+			else
+				predictCompTime += this->_m_vRob[i].aggregationMBEDur;
+		}
 		break;
+	}
+	case Surveillance:
+	{
+		if (cMode == controlMode::MBC)
+		{
+			increWorkLoad = rob.surveillanceMBC;
+			predictCompTime = rob.surveillanceMBCDur;
+		}
+		if (cMode == controlMode::MBE)
+		{
+			increWorkLoad = rob.surveillanceMBE;
+			predictCompTime = rob.surveillanceMBEDur;
+		}
+		for (size_t i = 0; i < hum._m_vControlRobID.size(); i++)
+		{
+			auto & it = hum._m_vControlRobID[i];
+			if (it.second == controlMode::MBC)
+				predictCompTime += this->_m_vRob[i].surveillanceMBCDur;
+			else
+				predictCompTime += this->_m_vRob[i].surveillanceMBEDur;
+		}
+		break;
+	}
 	default:
 		break;
 	}
-
 	auto predictWorkLoad = hum.curWorkLoad + increWorkLoad;
 	auto leftWorkLoad = hum.maxWorkLoad - predictWorkLoad;
 	if (leftWorkLoad >= 0)
 	{
 		double trustRatio;
 		if (rob.m_allianceID == humID)
-			trustRatio = 3;
+			trustRatio = 2;
 		else
 			trustRatio = 1;
 		double thresholdWorkLoad = hum.maxWorkLoad  *0.7;
 		double  approWorkLoad = abs(predictWorkLoad - thresholdWorkLoad);
-		return trustRatio * approWorkLoad;
+		if (approWorkLoad < 1)
+			approWorkLoad = 1;
+		return trustRatio / approWorkLoad / predictCompTime;
 	}
 	else
 	{
@@ -136,13 +184,14 @@ double HRCCSolution::calIncreFitness(size_t const & robID, size_t const & humID,
 		if (rob.m_allianceID == humID)
 			trustRatio = 1;
 		else
-			trustRatio = 3;
+			trustRatio = 2;
 		return trustRatio * leftWorkLoad;
 	}
 	return 0.0;
 }
 
-void HRCCSolution::update(size_t const & humID, size_t const & robID, size_t const & cMode, size_t const & tType)
+void HRCCSolution::update(size_t const & humID, size_t const & robID, size_t const & cMode, size_t const & tType,
+	double const &arrTime)
 {
 	auto &hum = this->_m_vHum[humID];
 	auto &rob = this->_m_vRob[robID];
@@ -150,20 +199,40 @@ void HRCCSolution::update(size_t const & humID, size_t const & robID, size_t con
 	switch (tType)
 	{
 	case Aggregation:
+	{
 		if (cMode == controlMode::MBC)
 			increseWorkLoad = rob.aggregationMBC;
 		else
 			increseWorkLoad = rob.aggregationMBE;
 		break;
+	}
+	case Surveillance:
+	{
+		if (cMode == controlMode::MBC)
+			increseWorkLoad = rob.surveillanceMBC;
+		else
+			increseWorkLoad = rob.surveillanceMBE;
+		break;
+	}
 	default:
 		break;
 	}
 	hum.curWorkLoad += increseWorkLoad;
 	hum._m_vControlRobID.push_back(pair<size_t, size_t>(robID, cMode));
-
+	rob.taskType = tType;
+	rob._m_controlMode = cMode;
+	rob.humanID = humID;
+	std::string robName;
+	robName = "rob";
+	robName += std::to_string(robID);
+	//	writeDebug(this->c_deg, robName, );
+	c_deg << "HumanWorkLoad " << hum.curWorkLoad << " humID " << humID
+		<< " time " << arrTime << endl;
+	//writeDebug(this->c_deg,"Human",)
 }
 
-void HRCCSolution::eliminate(size_t const & humID, size_t const & robID, size_t const & cMode, size_t const & tType)
+void HRCCSolution::eliminate(size_t const & humID, size_t const & robID, size_t const & cMode, size_t const & tType,
+	double const &eliminateTime)
 {
 	auto &hum = this->_m_vHum[humID];
 	auto &rob = this->_m_vRob[robID];
@@ -171,15 +240,31 @@ void HRCCSolution::eliminate(size_t const & humID, size_t const & robID, size_t 
 	switch (tType)
 	{
 	case Aggregation:
+	{
 		if (cMode == controlMode::MBC)
 			eliminateWorkLoad = rob.aggregationMBC;
 		else
 			eliminateWorkLoad = rob.aggregationMBE;
 		break;
+	}
+	case Surveillance:
+	{
+		if (cMode == controlMode::MBC)
+			eliminateWorkLoad = rob.surveillanceMBC;
+		else
+			eliminateWorkLoad = rob.surveillanceMBE;
+		break;
+	}
 	default:
 		break;
 	}
 	hum.curWorkLoad -= eliminateWorkLoad;
+
+	c_deg << "HumanWorkLoad " << hum.curWorkLoad << " humID " << humID
+		<< " time " << eliminateTime << endl;
+	//c_deg << "humIDE " << humID << " robID " << robID
+	//	<< " startTime " << eliminateTime << endl;;
+
 	decltype(hum._m_vControlRobID.begin()) eraseIt;
 	//auto eraseIt = 
 	for (auto it = hum._m_vControlRobID.begin(); it != hum._m_vControlRobID.end(); it++)
