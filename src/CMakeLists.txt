@@ -10,9 +10,21 @@ set(file_list
 	stadfx.h
 	ssconfig.hpp
 	ReadCfg.h ReadCfg.cpp)
-	
+
+set(_dll_file_list 
+	#simple_test.cpp
+	Human.h Human.cpp
+	Robot.h Robot.cpp
+	HRCCSolution.h HRCCSolution.cpp
+	stadfx.h
+	ssconfig.hpp
+	ReadCfg.h ReadCfg.cpp
+	cppHRCC_cppHRCC.h cppHRCC_cppHRCC.cpp
+	)
 	
 
+	
+	
 include_directories(../include)
 find_package(Boost 1.65.0)
 
@@ -32,3 +44,5 @@ message(${PROJECT_BINARY_DIR})
 #message(${PROJECT_LIB_DIR})
 
 add_executable(test_HRCC  ${file_list})
+
+add_library(_HRCC_dll SHARED ${_dll_file_list})
