@@ -1,9 +1,8 @@
 #include "ReadCfg.h"
 #include "ssconfig.hpp"
+#include "stadfx.h"
 
-
-
-
+bool _degBool;
 ReadCfg::~ReadCfg()
 {
 }
@@ -26,6 +25,13 @@ void ReadCfg::read()
 	co_list.get("surveillanceMBCDur", _vSurveillanceMBCdur);
 	co_list.get("surveillanceMBEDur", _vSurveillanceMBEdur);
 
+	int t_debugBool;
+	co_list.get("debugBool", t_debugBool);
+	if (t_debugBool == 0)
+		this->_m_degBool = false;
+	else
+		this->_m_degBool = true;
+	_degBool = this->_m_degBool;
 
 	co_list.get("robType", _vRobType);
 }

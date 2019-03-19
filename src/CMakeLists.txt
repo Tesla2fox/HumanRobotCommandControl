@@ -22,7 +22,9 @@ set(_dll_file_list
 	cppHRCC_cppHRCC.h cppHRCC_cppHRCC.cpp
 	)
 	
-
+#set(_test_dll_file_list
+#	cppHRCC_cppHRCC.h
+#	dll_test.cpp)
 	
 	
 include_directories(../include)
@@ -46,3 +48,7 @@ message(${PROJECT_BINARY_DIR})
 add_executable(test_HRCC  ${file_list})
 
 add_library(_HRCC_dll SHARED ${_dll_file_list})
+
+#add_executable(_test_HRCC_dll ${_test_dll_file_list})
+
+#target_link_libraries(_test_HRCC_dll _HRCC_dll)

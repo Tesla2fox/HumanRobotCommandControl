@@ -17,6 +17,14 @@ JNIEXPORT jint JNICALL Java_cppHRCC_cppHRCC_InitStatus
 
 /*
  * Class:     cppHRCC_cppHRCC
+ * Method:    InitAllocate
+ * Signature: ([I)[I
+ */
+JNIEXPORT jintArray JNICALL Java_cppHRCC_cppHRCC_InitAllocate
+  (JNIEnv *, jclass, jintArray);
+
+/*
+ * Class:     cppHRCC_cppHRCC
  * Method:    HRCCArrTask
  * Signature: (IDI)[I
  */

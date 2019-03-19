@@ -1,1 +1,1 @@
-move 	D:\VScode\HumanRobotCommandControl\bin\test_HRcommandControl\Debug\_HRCC_dll.dll D:\javaCode\cppHRCC
+move 	D:\VScode\HumanRobotCommandControl\bin\test_HRcommandControl\Release\_HRCC_dll.dll D:\javaCode\cppHRCC

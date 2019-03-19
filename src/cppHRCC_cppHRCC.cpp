@@ -39,6 +39,13 @@ JNIEXPORT jint JNICALL Java_cppHRCC_cppHRCC_HRCCEndTask
 
 #include "stadfx.h"
 #include "ReadCfg.h"
+#include "HRCCSolution.h"
+
+vector<Robot> _ex_vRob;
+vector<Human> _ex_vHum;
+HRCCSolution _ex_HRCC;
+//bool _degBool;
+
 JNIEXPORT jint JNICALL Java_cppHRCC_cppHRCC_InitStatus(JNIEnv *env, jclass, jcharArray _fileName)
 {
 	cout << "fileName = " << _fileName << endl;
@@ -54,6 +61,52 @@ JNIEXPORT jint JNICALL Java_cppHRCC_cppHRCC_InitStatus(JNIEnv *env, jclass, jcha
 	}
 	buffer[len_char] = '\0';
 
+	ReadCfg read_cfg(buffer);
+	read_cfg.read();
+
+	std::default_random_engine eng;
+	std::uniform_int_distribution<size_t> dis(0, 3);
+
+	for (size_t i = 0; i < read_cfg._robotNum; i++)
+	{
+		Robot rob;
+		rob.humanID = -1;
+		rob.m_allianceID = dis(eng);
+		if (_degBool)
+			cout << " m_allianceID " << rob.m_allianceID << endl;
+		rob.aggregationBool = read_cfg._vAggregationBool[i];
+		rob.aggregationMBC = read_cfg._vAggregationMBC[i];
+		rob.aggregationMBE = read_cfg._vAggregationMBE[i];
+		rob.aggregationMBCDur = read_cfg._vAggregationMBCdur[i];
+		rob.aggregationMBEDur = read_cfg._vAggregationMBEdur[i];
+
+		rob.surveillanceBool = read_cfg._vSurveillanceBool[i];
+		rob.surveillanceMBC = read_cfg._vSurveillanceMBC[i];
+		rob.surveillanceMBE = read_cfg._vSurveillanceMBE[i];
+		rob.surveillanceMBCDur = read_cfg._vSurveillanceMBCdur[i];
+		rob.surveillanceMBEDur = read_cfg._vSurveillanceMBEdur[i];
+		_ex_vRob.push_back(rob);
+	}
+	for (size_t i = 0; i < read_cfg._humanNum; i++)
+	{
+		Human hum;
+		hum.maxWorkLoad = read_cfg._vHumanMaxWorkload[i];
+		hum.curWorkLoad = 0;
+		hum._m_controlMode = controlMode::noControl;
+		_ex_vHum.push_back(hum);
+	}
+
+	_ex_HRCC._m_vHum = _ex_vHum;
+	_ex_HRCC._m_vRob = _ex_vRob;
+	_ex_HRCC.init();
+	
+	//auto res = _ex_HRCC.allocate();
+	//	cout << " res size = " << res.size() << endl;
+	//for (auto &it : res)
+	//{
+	//	std::cout << it << " ";
+	//}
+
 	cout << "fileName = " << buffer << endl;
 	///malloc
 	//_fileName
@@ -62,21 +115,48 @@ JNIEXPORT jint JNICALL Java_cppHRCC_cppHRCC_InitStatus(JNIEnv *env, jclass, jcha
 	return x;
 }
 
+JNIEXPORT jintArray JNICALL Java_cppHRCC_cppHRCC_InitAllocate(JNIEnv *env, jclass, jintArray _allianceID)
+{
+
+	jint * jint_ptr = env->GetIntArrayElements(_allianceID, NULL);
+	int len_ = env->GetArrayLength(_allianceID);
+
+
+	for (size_t i = 0; i < _ex_HRCC._m_vRob.size(); i++)
+		_ex_HRCC._m_vRob[i].m_allianceID = jint_ptr[i];
+	
+	auto res = _ex_HRCC.allocate();
+
+	jintArray output = env->NewIntArray(res.size());
+	jboolean isCopy = JNI_FALSE;
+	jint * destArrayElems = env->GetIntArrayElements(output, &isCopy);
+	for (size_t i = 0; i < res.size(); i++)
+	{
+		destArrayElems[i] = res[i];
+	}
+	env->SetIntArrayRegion(output, 0, res.size(), destArrayElems);
+	return output;
+}
+
 JNIEXPORT jintArray JNICALL Java_cppHRCC_cppHRCC_HRCCArrTask(JNIEnv *env, jclass, jint robID, jdouble _arriveTime, jint _taskType)
 {
+	auto resSol = _ex_HRCC.tempAllocate(robID, _taskType, _arriveTime);
 	jintArray output = env->NewIntArray(2);
 	jboolean isCopy = JNI_FALSE;
 	jint * destArrayElems = env->GetIntArrayElements(output, &isCopy);
-	destArrayElems[0] = 1;
-	destArrayElems[1] = 2;
+	destArrayElems[0] = resSol.first;
+	destArrayElems[1] = resSol.second;
 	env->SetIntArrayRegion(output,0,2, destArrayElems);
 	return output;
 }
 
-JNIEXPORT jint JNICALL Java_cppHRCC_cppHRCC_HRCCEndTask(JNIEnv *, jclass, jint, jdouble)
+JNIEXPORT jint JNICALL Java_cppHRCC_cppHRCC_HRCCEndTask(JNIEnv *, jclass, jint robID, jdouble _endTime)
 {
+	cout << "bug is here" << endl;
 	jint x;
 	x = 10;
+	_ex_HRCC.eliminate(robID, _endTime);
+
 	return x;
 	//return JNIEXPORT jint JNICALL();
 }

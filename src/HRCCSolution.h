@@ -25,9 +25,15 @@ bool writeDebug(std::ofstream &deg, string const &str, T const &v_val)
 class HRCCSolution
 {
 public:
-	HRCCSolution(vector<Robot> vRob, vector<Human> vHum) {
+	HRCCSolution(vector<Robot> &vRob, vector<Human> &vHum) {
 		this->_m_vRob = vRob;
 		this->_m_vHum = vHum;
+		c_deg.open("D:\\VScode\\HumanRobotCommandControl\\data\\HRCC.dat");
+		writeDebug(c_deg, "robNum", this->_m_vRob.size());
+		writeDebug(c_deg, "humNum", this->_m_vHum.size());
+	}
+	HRCCSolution()
+	{
 		c_deg.open("D:\\VScode\\HumanRobotCommandControl\\data\\HRCC.dat");
 		writeDebug(c_deg, "robNum", this->_m_vRob.size());
 		writeDebug(c_deg, "humNum", this->_m_vHum.size());
@@ -56,4 +62,9 @@ private:
 	void eliminate(size_t const & humID, size_t const & robID, size_t const &cMode, size_t const &tType,
 		double const &eliminateTime);
 };
+
+
+extern vector<Robot> _ex_vRob;
+extern vector<Human> _ex_vHum;
+extern HRCCSolution _ex_HRCC;
 

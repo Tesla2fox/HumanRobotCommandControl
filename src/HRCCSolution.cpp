@@ -22,11 +22,12 @@ vector<size_t> HRCCSolution::allocate()
 		cout << "init allocation" << endl;
 		//作战小组与指挥员的关系如何确定
 		//计算每个作战小组
+		cout << " humSize = " << this->_m_vHum.size() << endl;
 		for (size_t i = 0; i < this->_m_vRob.size(); i++)
 		{
 			this->_m_curCCRelation[i] =
 				this->_m_vRob[i].m_allianceID;
-			//cout << _m_vRob[i].m_allianceID << " __";
+			cout << _m_vRob[i].m_allianceID << " __";
 		}
 	}
 	else
@@ -58,10 +59,21 @@ pair<size_t, size_t> HRCCSolution::tempAllocate(size_t const & robID, size_t con
 		{
 			double  MBCFitness = this->calIncreFitness(robID, i, controlMode::MBC, taskType, arrTime);
 			vFitness.push_back(tuple<size_t, size_t, double>(i, controlMode::MBC, MBCFitness));
-			if (rob.aggregationBool == 1)
+			if (taskType == Aggregation)
 			{
-				double  MBEFitness = this->calIncreFitness(robID, i, controlMode::MBE, taskType, arrTime);
-				vFitness.push_back(tuple<size_t, size_t, double>(i, controlMode::MBE, MBEFitness));
+				if (rob.aggregationBool == 1)
+				{
+					double  MBEFitness = this->calIncreFitness(robID, i, controlMode::MBE, taskType, arrTime);
+					vFitness.push_back(tuple<size_t, size_t, double>(i, controlMode::MBE, MBEFitness));
+				}
+			}
+			if (taskType == Surveillance)
+			{
+				if (rob.surveillanceBool== 1)
+				{
+					double  MBEFitness = this->calIncreFitness(robID, i, controlMode::MBE, taskType, arrTime);
+					vFitness.push_back(tuple<size_t, size_t, double>(i, controlMode::MBE, MBEFitness));
+				}
 			}
 		}
 		std::sort(vFitness.begin(), vFitness.end(), compTuple);
@@ -234,6 +246,8 @@ void HRCCSolution::update(size_t const & humID, size_t const & robID, size_t con
 void HRCCSolution::eliminate(size_t const & humID, size_t const & robID, size_t const & cMode, size_t const & tType,
 	double const &eliminateTime)
 {
+	cout << "bug is here ?" << endl;
+
 	auto &hum = this->_m_vHum[humID];
 	auto &rob = this->_m_vRob[robID];
 	double eliminateWorkLoad;

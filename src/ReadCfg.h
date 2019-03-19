@@ -24,9 +24,11 @@ public:
 	vector<double> _vSurveillanceMBCdur;
 	vector<double> _vSurveillanceMBEdur;
 
+	bool _m_degBool;
 	vector<size_t> _vRobType;	
 	void read();
 private:
 	const char *_m_fileName;
 };
 
+extern bool _degBool;
