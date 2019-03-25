@@ -2,9 +2,19 @@ robNum 0
 humNum 0
 alliance 1 2 3 0 1 2 3 0 1 2 3 0 1 2 3
 HumanWorkLoad 2 humID 2 time 1
-HumanWorkLoad 0 humID 2 time 2
-HumanWorkLoad 2 humID 2 time 1
-HumanWorkLoad 4 humID 2 time 1
-HumanWorkLoad 5 humID 2 time 1
-HumanWorkLoad 6 humID 2 time 1
-HumanWorkLoad 2 humID 1 time 1
+HumanWorkLoad 2 humID 1 time 0.5
+HumanWorkLoad 4 humID 2 time 0.5
+HumanWorkLoad 4 humID 1 time 0.5
+HumanWorkLoad 2 humID 0 time 0.5
+HumanWorkLoad 5 humID 1 time 0.5
+HumanWorkLoad 5 humID 2 time 0.5
+HumanWorkLoad 2 humID 3 time 0.5
+HumanWorkLoad 4 humID 0 time 0.5
+HumanWorkLoad 6 humID 1 time 0.5
+HumanWorkLoad 6 humID 2 time 0.5
+HumanWorkLoad 4 humID 3 time 0.5
+HumanWorkLoad 6 humID 0 time 0.5
+HumanWorkLoad 6 humID 3 time 0.5
+HumanWorkLoad 7 humID 2 time 0.5
+HumanWorkLoad 7 humID 3 time 0.5
+HumanWorkLoad 5 humID 2 time 2
