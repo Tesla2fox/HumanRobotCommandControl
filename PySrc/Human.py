@@ -24,39 +24,76 @@ class disType(Enum):
     formal = 1
 
 
-#def demo1():
-
 '''
 各种模型假设
 '''
 
-
-
 class HumanModel(object):
     def __init__(self):
         '''
-        processTime 服从正态分布
-        
-        
+        集结和搜索的 processTime 服从正态分布                
         '''
+        self.a_time_disType = disType.normal
+        self.s_time_disType = disType.normal
         self.a_timeProcess_mu = 2
         self.a_timeProcess_sigma = 0.5
-        
-        
+        '''
+        集结和搜索的 processTime 服从正态分布                
+        '''
+        self.a_time_disType = disType.normal
+        self.s_time_disType = disType.normal
+        self.a_timeProcess_mu = 2
+        self.a_timeProcess_sigma = 0.5        
+        pass
+
+
+class Human(HumanModel):
+    def __init__(self):
         pass
 
     
+import numpy as np    
+    
 if __name__ == '__main__':
-    mu, sigma , num_bins = 0, 1, 50
-    x = mu + sigma * np.random.randn(1000000)
-    # 正态分布的数据
-    n, bins, patches = plt.hist(x, num_bins, normed=True, facecolor = 'blue', alpha = 0.5)
-    # 拟合曲线
-    y = mlab.normpdf(bins, mu, sigma)
-    plt.plot(bins, y, 'r--')
-    plt.xlabel('Expectation')
-    plt.ylabel('Probability')
-    plt.title('histogram of normal distribution: $\mu = 0$, $\sigma=1$')
+    print(np.random.choice(4,15))
+#    f = open('')        
+    f = open('pyCfg.dat','w')    
+    for i in range(3):
+        f.write('index ' + str(i))
+        f.write(' fireRocket ')
+        f.write(' dis ' + str(disType.formal) + ' 0 ')
+        f.write(' low ' + str(3) + '  high '+ str(5))
+        f.write('\n')
+    for i in range(3,6):
+        f.write('index ' + str(i))
+        f.write(' dubinsScoutCar ')
+        f.write(' dis ' + str(disType.formal) + ' 0 ')
+        f.write(' low ' + str(4) + '  high '+ str(6))
+        f.write('\n')
+        
+    for i in range(7,9):
+        f.write('index ' + str(i))
+        f.write(' no_dubinsScoutCar ')
+        f.write(' dis ' + str(disType.formal) + ' 0 ')
+        f.write(' low ' + str(3) + '  high '+ str(5))
+        f.write('\n')        
 
-    plt.subplots_adjust(left = 0.15)
-    plt.show()
+    for i in range(10,12):
+        f.write('index ' + str(i))
+        f.write(' fireGuard ')
+        f.write(' dis ' + str(disType.formal) + ' 0 ')
+        f.write(' low ' + str(3) + '  high '+ str(5))
+        f.write('\n')        
+
+    for i in range(7,9):
+        f.write('index ' + str(i))
+        f.write(' no_dubinsCar ')
+        f.write(' dis ' + str(disType.formal) + ' 0 ')
+        f.write(' low ' + str(3) + '  high '+ str(5))
+        f.write('\n')        
+        
+    for i in range(15):
+        f.write('wtf\n')
+    f.close()
+    print(disType(1))
+
