@@ -6,8 +6,8 @@ index 4 dubinsScoutCar  dis disType.formal 0  low 4  high 6
 index 5 dubinsScoutCar  dis disType.formal 0  low 4  high 6
 index 7 no_dubinsScoutCar  dis disType.formal 0  low 3  high 5
 index 8 no_dubinsScoutCar  dis disType.formal 0  low 3  high 5
-index 7 no_dubinsCar  dis disType.formal 0  low 3  high 5
-index 8 no_dubinsCar  dis disType.formal 0  low 3  high 5
+index 10 fireGuard  dis disType.formal 0  low 3  high 5
+index 11 fireGuard  dis disType.formal 0  low 3  high 5
 index 7 no_dubinsCar  dis disType.formal 0  low 3  high 5
 index 8 no_dubinsCar  dis disType.formal 0  low 3  high 5
 wtf

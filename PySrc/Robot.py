@@ -16,3 +16,18 @@ class TaskType(Enum):
 
 
 
+class Robot(object):
+    def __init__(self,index):
+        self._index = index
+        self._taskType = 0
+        self._controlMode = 0
+        self._humID = 0
+        pass
+    def __str__(self):
+        return 'Rob index =  ' + str(self._index)
+
+
+if __name__ == '__main__':
+    rob = Robot(2)    
+    print(rob)
+    
