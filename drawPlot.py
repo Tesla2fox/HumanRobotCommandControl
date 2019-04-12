@@ -18,7 +18,7 @@ print(humData_x)
 print(humData_y)
 
 df = []
-with open('D:\\VScode\\HumanRobotCommandControl\\data//HRCC.dat') as txtData:
+with open('D:\\VScode\\HumanRobotCommandControl\\PySrc//_hrcc_DEG.dat') as txtData:
     lines = txtData.readlines()
     for line in lines:
         lineData = line.split()
@@ -28,6 +28,7 @@ with open('D:\\VScode\\HumanRobotCommandControl\\data//HRCC.dat') as txtData:
             if (lineData[0] == 'humID'):
                 unitDic = dict(Task = 'hum' + lineData[1] , Start = lineData[5], Finish =  lineData[7],
                      Resource = 'rob' + lineData[3])
+                
                 df.append(unitDic) 
             if (lineData[0] == 'HumanWorkLoad'):
                 humID = int(lineData[3])
@@ -70,6 +71,28 @@ for i in range(15):
     
 import plotly.plotly as py
 import plotly.figure_factory as ff
+
+
+with open('D:\\VScode\\HumanRobotCommandControl\\PySrc//_hrcc_DEG.dat') as txtData:
+    lines = txtData.readlines()
+    for line in lines:
+        lineData = line.split()
+        if (len(lineData)<= 1):
+            continue
+        else:
+            if (lineData[0] == 'humID'):
+                unitDic = dict(Task = 'hum' + lineData[1] , Start = lineData[5], Finish =  lineData[7],
+                     Resource = 'rob' + lineData[3])
+                df.append(unitDic) 
+            if (lineData[0] == 'HumanWorkLoad'):
+                humID = int(lineData[3])
+                humData_x[humID].append(float(lineData[5]))
+                humData_y[humID].append(float(lineData[1]))
+
+
+
+
+
 ##
 #df = [dict(Task = 'Human-0', Start = '0', Finish='4',Resource = 'rob0'),
 #      dict(Task = 'Human-0', Start = '4', Finish='6',Resource = 'rob1')]

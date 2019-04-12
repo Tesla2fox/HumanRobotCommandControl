@@ -76,12 +76,14 @@ class HumanModel(object):
         return workEff
     
     def getProcessTime(self,_workEff,_taskType):
+        print('_taskType',_taskType)
         if _taskType == TaskType.Aggregation:
            workQuantity = np.random.uniform(1,2)
            proTime = workQuantity/_workEff
         if _taskType == TaskType.Surveillance:
            workQuantity = np.random.normal(2,0.5)           
            proTime = workQuantity/_workEff
+        print(proTime)
         return proTime
     def getPredictProcessTime(self,_workEff,_taskType):
         if _taskType == TaskType.Aggregation:

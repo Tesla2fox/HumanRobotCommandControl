@@ -22,6 +22,10 @@ class Robot(object):
         self._taskType = 0
         self._controlMode = 0
         self._humID = 0
+        self._arrTime = 0
+        self._beginProTime = 0
+        self._endProTime = 0
+        self._predictProTime = 0
         pass
     def __str__(self):
         return 'Rob index =  ' + str(self._index)
