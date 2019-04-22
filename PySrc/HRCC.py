@@ -66,7 +66,7 @@ class HRCCSOL:
         _workEff = hum.getWorkEfficieny(hum._cWorkLoad,hum._cFatigue)
         proTime = hum.getProcessTime(_workEff,_taskType)                
 
-        realStartTime = ?
+        realStartTime = 1
         
         return realStartTime
         

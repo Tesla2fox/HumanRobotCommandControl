@@ -13,6 +13,7 @@ class TaskType(Enum):
     Aggregation = 3
     Surveillance = 4
     Search = 5
+    noTask = 6
 
 
 
