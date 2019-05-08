@@ -1,0 +1,30 @@
+HumanWorkLoad 3 humID 1 time 6.02763376072
+HumanWorkLoad 0 humID 1 time 9.02763376072
+humID 1 robID 3 start 6.02763376072 end 9.02763376072
+HumanWorkLoad 2 humID 1 time 13.2641817541
+HumanWorkLoad 0 humID 1 time 16.2641817541
+humID 1 robID 3 start 13.2641817541 end 16.2641817541
+HumanWorkLoad 3 humID 1 time 25.1819117619
+HumanWorkLoad 0 humID 1 time 28.1819117619
+humID 1 robID 3 start 25.1819117619 end 28.1819117619
+HumanWorkLoad 3 humID 1 time 37.8185393669
+HumanWorkLoad 0 humID 1 time 40.8185393669
+humID 1 robID 3 start 37.8185393669 end 40.8185393669
+HumanWorkLoad 3 humID 0 time 4.37587211263
+HumanWorkLoad 0 humID 0 time 7.37587211263
+humID 0 robID 2 start 4.37587211263 end 7.37587211263
+HumanWorkLoad 2 humID 1 time 5.48813503927
+HumanWorkLoad 0 humID 1 time 8.48813503927
+humID 1 robID 1 start 5.48813503927 end 8.48813503927
+HumanWorkLoad 3 humID 1 time 14.9470761699
+HumanWorkLoad 0 humID 1 time 17.9470761699
+humID 1 robID 1 start 14.9470761699 end 17.9470761699
+HumanWorkLoad 3 humID 0 time 7.15189366372
+HumanWorkLoad 0 humID 0 time 10.1518936637
+humID 0 robID 0 start 7.15189366372 end 10.1518936637
+HumanWorkLoad 2 humID 0 time 15.6007254937
+HumanWorkLoad 0 humID 0 time 18.6007254937
+humID 0 robID 0 start 15.6007254937 end 18.6007254937
+HumanWorkLoad 2 humID 0 time 22.435140682
+HumanWorkLoad 0 humID 0 time 25.435140682
+humID 0 robID 0 start 22.435140682 end 25.435140682

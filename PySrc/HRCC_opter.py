@@ -86,16 +86,19 @@ class RealRobEvent(object):
     def __init__(self):        
         self._eventTypeLst  = []
         self._eventTimeLst = []
-#    self.    
+        '''
+        当前的状态
+        '''
         self._c_status = RobSTATUS.stop
         self._c_eventTime = sys.float_info.max
         self._c_taskType = TaskType.noTask
         self._c_eventStartProTime = sys.float_info.max
         self._c_eventEndProTime = sys.float_info.max
-        self._c_eventArrTime = sys.float_info.max
-        
-        self._c_taskID = 0
-
+        self._c_eventArrTime = sys.float_info.max        
+        self._c_taskPremID = 0
+        '''
+        最终的状态
+        '''
         self._maxTaskNum = 0
         self._cmpTime = sys.float_info.max        
     
@@ -165,61 +168,87 @@ class HRCC_Opt_Solver(object):
         while not self.endAllEvent():
 #            print('eventID',eventID)
             eventID = eventID + 1
-            if eventID > 10:
-                raise Exception()
+#            if eventID > 10:
+#                raise Exception()
             activeRobID  = self.findEvent()
             print('actRobID = ',activeRobID)
             robEvent = self._realRobEventLst[activeRobID]            
             
             if robEvent._c_status == RobSTATUS.arr:                
+                robEvent._c_eventArrTime = robEvent._c_eventTime
                 _eventTime = robEvent._c_eventArrTime
-                _eventTime = robEvent._c_taskType
+                _taskType = robEvent._c_taskType
                 
-                activeRobEventID = self.robEventIDLst[activeRobID]
+                
+#                activeRobEventID = self.robEventIDLst[activeRobID]
 #                robArrTime = self.robArrTime[activeRobID]
 #                _taskType = robArrTime[activeRobEventID][1]
 #                _eventTime = self.robEventTimeLst[activeRobID]
-                _eventTime,_taskType = self._robEventArrTime[activeRobID][activeRobEventID]                
+#                _eventTime,_taskType = self._robEventArrTime[activeRobID][activeRobEventID]                
                 humID,cMode = hrccSol.tempAllocation(activeRobID,_taskType,_eventTime)
+                                        
                 
-                        
-                startProTime = hrccSol.generateRealStartTime(humID,activeRobID,cMode)                
-                endProTime = hrccSol.generateRealEndTime(humID,activeRobID,cMode,_eventTime)
+                startProTime = self.getEventStartProRealTime(humID,activeRobID,cMode,_eventTime)
+                endProTime = self.getEventEndProRealTime(humID,activeRobID,cMode,_eventTime)
+                
+                
+                robEvent._c_eventStartProTime = startProTime
+                robEvent._c_eventEndProTime = endProTime
+                
+                '''
+                处理状态值
+                '''
+                robEvent._c_eventTime  = robEvent._c_eventStartProTime
+                robEvent._c_status = RobSTATUS.startPro
                 
 #                _preTime = hrccSol.generateRealStartTime(humID,activeRobID,cMode,_eventTime)
 #                _
-                self.robEventTimeLst[activeRobID] = _preTime
+
+#                self.robEventTimeLst[activeRobID] = _preTime
 #                _preTime = hrccSol.generateProTime(humID,activeRobID,cMode)                
 #                self.robEventTimeLst[activeRobID] = self.robEventTimeLst[activeRobID] + _preTime
 #                self.robStatusLst[activeRobID] =     RobSTATUS.ready_end                
-                self.robStatusLst[activeRobID] = RobSTATUS.startPro
+#                self.robStatusLst[activeRobID] = RobSTATUS.startPro
             else:
-                if self.robStatusLst[activeRobID] == RobSTATUS.startPro:
-                    
-                    
-                    
-                    
-                    
-                    
-                    self.robStatusLst[activeRobID] = RobSTATUS.endPro                    
+                if robEvent._c_status == RobSTATUS.startPro:
+                    robEvent._c_status = RobSTATUS.endPro
+                    robEvent._c_eventTime = robEvent._c_eventEndProTime
+#                self.robStatusLst[activeRobID] == RobSTATUS.startPro:
+#                    self.robStatusLst[activeRobID] = RobSTATUS.endPro                    
                     pass                
                 else:                        
-                    self.robEventIDLst[activeRobID] = self.robEventIDLst[activeRobID] + 1
-                    hrccSol.elimate(activeRobID,self.robEventTimeLst[activeRobID])
+                    if robEvent._c_status == RobSTATUS.stop:
+                        raise Exception('stop')
+                    if robEvent._c_status == RobSTATUS.endPro:
+                        hrccSol.elimate(activeRobID,robEvent._c_eventTime)
+                        robEvent._c_taskPremID = robEvent._c_taskPremID + 1
+                        if robEvent._c_taskPremID == robEvent._maxTaskNum:
+                            robEvent._cmpTime = robEvent._c_eventTime
+                            robEvent._c_status = RobSTATUS.stop
+                            continue
+                        else:
+                            robEvent._c_status = RobSTATUS.arr
+                            robEvent._c_eventTime = robEvent._c_eventTime + \
+                                    robEvent._eventTimeLst[robEvent._c_taskPremID]
+                            robEvent._c_taskType = robEvent._eventTypeLst[robEvent._c_taskPremID]
+                    
+                    
+#                    self.robEventIDLst[activeRobID] = self.robEventIDLst[activeRobID] + 1
+#                    hrccSol.elimate(activeRobID,self.robEventTimeLst[activeRobID])
     
-                    if self.robEventIDLst[activeRobID] == self.robEventMAXNumLst[activeRobID]:
-                        self.robCmpTimeLst[activeRobID] = self.robEventTimeLst[activeRobID]
-                        self.robEventTimeLst[activeRobID] = sys.float_info.max
-                        self.robStatusLst[activeRobID] = RobSTATUS.stop
-                        continue
-                    else:
-    #                    print(self.robArrTime[activeRobID][self.robEventIDLst[activeRobID]][0])
-                        self.robEventTimeLst[activeRobID] = self.robEventTimeLst[activeRobID] +\
-                                                    self.robArrTime[activeRobID][self.robEventIDLst[activeRobID]][0]
-                        self.robStatusLst[activeRobID] = RobSTATUS.arr
-
+#                    if self.robEventIDLst[activeRobID] == self.robEventMAXNumLst[activeRobID]:
+#                        self.robCmpTimeLst[activeRobID] = self.robEventTimeLst[activeRobID]
+#                        self.robEventTimeLst[activeRobID] = sys.float_info.max
+#                        self.robStatusLst[activeRobID] = RobSTATUS.stop
+#                        continue
+#                    else:
+#    #                    print(self.robArrTime[activeRobID][self.robEventIDLst[activeRobID]][0])
+#                        self.robEventTimeLst[activeRobID] = self.robEventTimeLst[activeRobID] +\
+#                                                    self.robArrTime[activeRobID][self.robEventIDLst[activeRobID]][0]
+#                        self.robStatusLst[activeRobID] = RobSTATUS.arr
 
         print(self.calMakespan())                                
+#        raise Exception('sdakjsd')
         pass
                 
 #            hrccSol.tempAllocation(1,TaskType.Aggregation,0)
@@ -264,14 +293,17 @@ class HRCC_Opt_Solver(object):
 #        eventRobID = robEventTime[0]
         return eventRobID
         
-    def getEventStartProRealTime(self,humID,_eventTime):        
-        return _eventTime +  random.random() * 3
+    def getEventStartProRealTime(self,humID,robID,cMode,_eventTime):        
+        return _eventTime + 2
+#        return _eventTime +  random.random() * 3
 
-    def getEventProRealTime(self,humID,_eventTime):        
-        return  random.random() * 2        
+    def getEventEndProRealTime(self,humID,robID,cMode,_eventTime):        
+        return _eventTime + 3
+#        return  random.random() * 2        
 
     def calMakespan(self):
-        return max(self.robCmpTimeLst)
+        robCmpTimeLst = [x._cmpTime for x in self._realRobEventLst]
+        return max(robCmpTimeLst)
     
     def endAllEvent(self):        
         for robEvent in self._realRobEventLst:

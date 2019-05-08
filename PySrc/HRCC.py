@@ -84,6 +84,7 @@ class HRCCSOL:
     def getPredictMakespan(self,humID,predictEndProTime):
         _predictLst = copy.copy(self._humStartProTime)
         _predictLst[humID] = predictEndProTime
+        print(_predictLst)
         return max(_predictLst)
     
     def tempAllocation(self,robID,taskType,arrTime):
@@ -170,9 +171,11 @@ class HRCCSOL:
 
                         
         self._humStartProTime[humID] = eliminationTime        
-        for inQRobID in range(hum._cRobLst):
-            inQueueRob =  self._robLst[inQRobID]
-            self._humStartProTime[humID] = inQueueRob._predictProTime + self._humStartProTime[humID]
+        print(hum._cRobLst)
+        if hum._cRobLst:            
+            for inQRobID in range(hum._cRobLst):
+                inQueueRob =  self._robLst[inQRobID]
+                self._humStartProTime[humID] = inQueueRob._predictProTime + self._humStartProTime[humID]
             
 #        self._humStartProTime[humID]
                 
@@ -219,7 +222,8 @@ class HRCCSOL:
         
         predictProDur = preMakespan - arrTime
         
-        
+        if not predictProDur:
+            raise Exception('wtf')
 #        print(preMakespan)
 #        print(arrTime)
         
